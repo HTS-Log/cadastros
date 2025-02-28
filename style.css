@@ -3,11 +3,14 @@ table {
   margin: auto;
   border-collapse: collapse;
 }
+
 th, td {
   border: 1px solid black;
   padding: 10px;
   text-align: center;
+  white-space: nowrap;
 }
+
 th {
   background-color: green;
   color: white;
@@ -15,4 +18,37 @@ th {
 
 h2 {
   text-align: center;
+}
+
+/* Responsividade apenas para telas menores (celulares) */
+@media screen and (max-width: 768px) {
+  .table-container {
+    overflow-x: auto; /* Adiciona rolagem horizontal */
+    display: block;
+    width: 100%;
+  }
+
+  table {
+    width: 100%;
+    max-width: none; /* Permite que a tabela expanda conforme necessário */
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 8px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  table {
+    font-size: 12px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
 }
