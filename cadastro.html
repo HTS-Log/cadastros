@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Motoristas</title>
+    <style>
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: green;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center;">Cadastro de Motoristas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Nome</th>
+                <th>Placa</th>
+                <th>Contato</th>
+                <th>Status</th>
+                <th>Finalizado</th>
+                <th>Agente</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-dados">
+            <!-- Os dados serão inseridos aqui -->
+        </tbody>
+    </table>
+
+    <script>
+        const urlAPI = "https://script.google.com/macros/s/AKfycbyGkJkHTSc3nWsqVijjmYsDTuqLwdvtEugWEBXOZvTYETJS4QxG3d_4kbSKGhjdJMFu/exec";
+
+        function carregarDados() {
+            fetch(urlAPI)
+                .then(response => response.json())
+                .then(dados => {
+                    const tabela = document.getElementById("tabela-dados");
+                    tabela.innerHTML = ""; 
+
+                    const hoje = new Date();
+                    const dataFormatadaHoje = `${hoje.getDate().toString().padStart(2, '0')}/${(hoje.getMonth() + 1).toString().padStart(2, '0')}/${hoje.getFullYear()}`;
+
+                    dados.forEach(item => {
+                        // Converte a data para o formato desejado
+                        const dataObjeto = new Date(item.Data);
+                        const dataFormatada = `${dataObjeto.getDate().toString().padStart(2, '0')}/${(dataObjeto.getMonth() + 1).toString().padStart(2, '0')}/${dataObjeto.getFullYear()} ${dataObjeto.getHours().toString().padStart(2, '0')}:${dataObjeto.getMinutes().toString().padStart(2, '0')}`;
+
+                        // Exibir apenas registros do dia atual
+                        if (dataFormatada.startsWith(dataFormatadaHoje)) {
+                            const linhaHTML = `
+                                <tr>
+                                    <td>${dataFormatada}</td>
+                                    <td>${item.Nome}</td>
+                                    <td>${item.Placa}</td>
+                                    <td>${item.Contato}</td>
+                                    <td>${item.Status}</td>
+                                    <td>${item.Finalizado || 'Não'}</td>
+                                    <td>${item.Agente || 'Não informado'}</td>
+                                </tr>`;
+                            tabela.innerHTML += linhaHTML;
+                        }
+                    });
+                })
+                .catch(error => console.error("Erro ao carregar os dados:", error));
+        }
+
+        setInterval(carregarDados, 30000);
+        carregarDados();
+    </script>
+
+</body>
+</html>
