@@ -1,4 +1,4 @@
-const urlAPI = "https://script.google.com/macros/s/AKfycbyGkJkHTSc3nWsqVijjmYsDTuqLwdvtEugWEBXOZvTYETJS4QxG3d_4kbSKGhjdJMFu/exec";
+const urlAPI = "https://script.google.com/macros/s/AKfycbzswkZb7WBo5zJIi2dwATjz5kNvw6Qx2QlNJzLj2xa8-hQTQ50iMeWZvvx7u55Zq3P5/exec";
 
 function carregarDados() {
   fetch(urlAPI)
