@@ -51,3 +51,36 @@ h2 {
     font-size: 16px;
   }
 }
+
+.filtros {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filtros input, .filtros select {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.status-ativo {
+  color: green;
+  font-weight: bold;
+}
+
+.status-inativo {
+  color: red;
+  font-weight: bold;
+}
+
+.finalizado-sim {
+  color: green;
+}
+
+.finalizado-nao {
+  color: red;
+}
