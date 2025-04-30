@@ -30,6 +30,8 @@ function carregarDados() {
           const finalizadoClass = item.Finalizado === "Sim" ? "finalizado-sim" : "finalizado-nao";
           const finalizadoText = item.Finalizado || "Não";
           const agente = item.Agente || "Não informado";
+          const statusBadge = `<span class="badge ${item.Status === "Ativo" ? "ativo" : "inativo"}">${item.Status}</span>`;
+const finalizadoBadge = `<span class="badge ${item.Finalizado === "Sim" ? "sim" : "nao"}">${item.Finalizado || "Não"}</span>`;
 
           const linhaHTML = `
             <tr>
@@ -58,3 +60,10 @@ document.getElementById("filtro-data").value = hojeISO;
 
 carregarDados();
 setInterval(carregarDados, 10000);
+
+const toggle = document.getElementById("toggle-theme");
+toggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  const modoEscuroAtivo = document.body.classList.contains("dark-mode");
+  toggle.textContent = modoEscuroAtivo ? "☀️ Modo Claro" : "🌙 Modo Escuro";
+});

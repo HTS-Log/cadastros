@@ -84,3 +84,135 @@ h2 {
 .finalizado-nao {
   color: red;
 }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #111;
+  transition: background 0.3s, color 0.3s;
+}
+
+header {
+  background-color: #1f1f1f;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  position: relative;
+}
+
+#toggle-theme {
+  position: absolute;
+  right: 20px;
+  top: 40px;
+  padding: 6px 12px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logo {
+  position: absolute;
+  width: 80px;
+  left: 20px;
+  top: 15px;
+  padding: 6px 12px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 30px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+th {
+  background-color: #007b5e;
+  color: white;
+  text-transform: uppercase;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+.badge {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+}
+
+.badge.ativo { background-color: green; }
+.badge.inativo { background-color: red; }
+.badge.sim { background-color: green; }
+.badge.nao { background-color: gray; }
+
+.filtros {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filtros input {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* 🌙 Modo Escuro */
+body.dark-mode {
+  background-color: #121212;
+  color: #eee;
+}
+
+body.dark-mode .container {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode table, 
+body.dark-mode th, 
+body.dark-mode td {
+  border-color: #444;
+}
+
+body.dark-mode th {
+  background-color: #2b7a78;
+}
+
+body.dark-mode tr:hover {
+  background-color: #222;
+}
+
+body.dark-mode #toggle-theme {
+  background-color: #666;
+}

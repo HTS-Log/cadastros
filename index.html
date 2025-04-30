@@ -7,32 +7,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastros - HTS</title>
 </head>
-<body>
 
-    <h2>Cadastro de Motoristas</h2>
-    <div class="filtros">
-        <input type="text" id="filtro-nome" placeholder="Filtrar por nome...">
-        <input type="date" id="filtro-data">
+<body class="light-mode">
+    <header>
+        <h1>Cadastro de Motoristas - HTS</h1>
+        <button id="toggle-theme">🌙 Modo Escuro</button>
+    </header>
+
+    <div class="container">
+        <img class="logo" src="logo.png" alt="">
+        <h2>Cadastro de Motoristas</h2>
+
+        <div class="filtros">
+            <input type="text" id="filtro-nome" placeholder="Filtrar por nome...">
+            <input type="date" id="filtro-data">
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Nome</th>
+                        <th>Placa</th>
+                        <th>Contato</th>
+                        <th>Status</th>
+                        <th>Finalizado</th>
+                        <th>Pix Cadastrado</th>
+                        <th>Agente</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-dados">
+                </tbody>
+            </table>
+        </div>
     </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Data</th>
-                <th>Nome</th>
-                <th>Placa</th>
-                <th>Contato</th>
-                <th>Status</th>
-                <th>Finalizado</th>
-                <th>Pix Cadastrado</th>
-                <th>Agente</th>
-            </tr>
-        </thead>
-        <tbody id="tabela-dados">
-            
-        </tbody>
-    </table>
 
     <script type="module" src="script.js"></script>
-
 </body>
 </html>
