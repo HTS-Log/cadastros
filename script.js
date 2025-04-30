@@ -25,6 +25,7 @@ function carregarDados() {
                                     <td>${item.Contato}</td>
                                     <td>${item.Status}</td>
                                     <td>${item.Finalizado || 'Não'}</td>
+                                    <td>${item.Pix}</td>
                                     <td>${item.Agente || 'Não informado'}</td>
                                 </tr>`;
           tabela.innerHTML += linhaHTML;
