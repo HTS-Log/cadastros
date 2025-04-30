@@ -20,17 +20,16 @@ h2 {
   text-align: center;
 }
 
-/* Responsividade apenas para telas menores (celulares) */
 @media screen and (max-width: 768px) {
   .table-container {
-    overflow-x: auto; /* Adiciona rolagem horizontal */
+    overflow-x: auto;
     display: block;
     width: 100%;
   }
 
   table {
     width: 100%;
-    max-width: none; /* Permite que a tabela expanda conforme necessário */
+    max-width: none; 
     font-size: 14px;
   }
 

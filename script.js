@@ -13,7 +13,7 @@ function carregarDados() {
       dados.forEach(item => {
 
         const dataObjeto = new Date(item.Data);
-        const dataFormatada = `${dataObjeto.getDate().toString().padStart(2, '0')}/${(dataObjeto.getMonth() + 1).toString().padStart(2, '0')}/${dataObjeto.getFullYear()} ${dataObjeto.getHours().toString().padStart(2, '0')}:${dataObjeto.getMinutes().toString().padStart(2, '0')}`;
+        const dataFormatada = `${dataObjeto.getDate().toString().padStart(2, '0')}/${(dataObjeto.getMonth() + 1).toString().padStart(2, '0')}/${dataObjeto.getFullYear()}`;
 
 
         if (dataFormatada.startsWith(dataFormatadaHoje)) {
