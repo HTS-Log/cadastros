@@ -104,7 +104,7 @@ header {
 #toggle-theme {
   position: absolute;
   right: 20px;
-  top: 40px;
+  top: 25px;
   padding: 6px 12px;
   background-color: #444;
   color: white;
@@ -215,4 +215,33 @@ body.dark-mode tr:hover {
 
 body.dark-mode #toggle-theme {
   background-color: #666;
+}
+
+#ver-resumo {
+  position: absolute;
+  right: 20px;
+  top: 65px;
+  padding: 6px 12px;
+  background-color: #007b5e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.resumo-container {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#recarregar-pagina {
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #007b5e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }

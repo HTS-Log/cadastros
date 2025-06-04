@@ -12,6 +12,9 @@
     <header>
         <h1>Cadastro de Motoristas - HTS</h1>
         <button id="toggle-theme">🌙 Modo Escuro</button>
+        <a href="resumo.html">
+            <button id="ver-resumo">📊 Ver Resumo Diário</button>
+        </a>
     </header>
 
     <div class="container">
@@ -21,6 +24,7 @@
         <div class="filtros">
             <input type="text" id="filtro-nome" placeholder="Filtrar por nome...">
             <input type="date" id="filtro-data">
+            <button id="recarregar-pagina">🔄 Recarregar</button>
         </div>
 
         <div class="table-container">
@@ -35,6 +39,7 @@
                         <th>Finalizado</th>
                         <th>Pix Cadastrado</th>
                         <th>Agente</th>
+                        <th>Embarcador</th>
                     </tr>
                 </thead>
                 <tbody id="tabela-dados">

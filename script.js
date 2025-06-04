@@ -30,6 +30,7 @@ function carregarDados() {
           const finalizadoClass = item.Finalizado === "Sim" ? "finalizado-sim" : "finalizado-nao";
           const finalizadoText = item.Finalizado || "Não";
           const agente = item.Agente || "Não informado";
+          const embarcador = item.Embarcador || "Não informado";
           const statusBadge = `<span class="badge ${item.Status === "Ativo" ? "ativo" : "inativo"}">${item.Status}</span>`;
 const finalizadoBadge = `<span class="badge ${item.Finalizado === "Sim" ? "sim" : "nao"}">${item.Finalizado || "Não"}</span>`;
 
@@ -43,6 +44,7 @@ const finalizadoBadge = `<span class="badge ${item.Finalizado === "Sim" ? "sim" 
               <td class="${finalizadoClass}">${finalizadoText}</td>
               <td>${item.Pix}</td>
               <td>${agente}</td>
+              <td>${embarcador}</td>
             </tr>`;
           tabela.innerHTML += linhaHTML;
         }
@@ -67,3 +69,46 @@ toggle.addEventListener("click", () => {
   const modoEscuroAtivo = document.body.classList.contains("dark-mode");
   toggle.textContent = modoEscuroAtivo ? "☀️ Modo Claro" : "🌙 Modo Escuro";
 });
+
+document.getElementById("ver-resumo").addEventListener("click", async () => {
+  try {
+    const response = await fetch(urlAPI);
+    const dados = await response.json();
+
+    const filtroDataInput = document.getElementById("filtro-data")?.value;
+    let dataFiltro = "";
+    if (filtroDataInput) {
+      const partes = filtroDataInput.split("-");
+      dataFiltro = `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+
+    const contador = {};
+    dados.forEach(item => {
+      const dataObjeto = new Date(item.Data);
+      const dataFormatada = `${dataObjeto.getDate().toString().padStart(2, '0')}/${(dataObjeto.getMonth() + 1).toString().padStart(2, '0')}/${dataObjeto.getFullYear()}`;
+      
+      if (dataFormatada === dataFiltro) {
+        const embarcador = item.Embarcador || "Não informado";
+        contador[embarcador] = (contador[embarcador] || 0) + 1;
+      }
+    });
+
+    const maisEnviou = Object.entries(contador).sort((a, b) => b[1] - a[1])[0];
+
+    const resumoDiv = document.getElementById("resumo-dia");
+    if (maisEnviou) {
+      resumoDiv.textContent = `📌 Embarcador com mais cadastros hoje (${dataFiltro}): ${maisEnviou[0]} (${maisEnviou[1]} cadastros)`;
+    } else {
+      resumoDiv.textContent = `⚠️ Nenhum cadastro encontrado para a data selecionada (${dataFiltro}).`;
+    }
+
+  } catch (error) {
+    console.error("Erro ao gerar resumo:", error);
+  }
+});
+
+document.getElementById("recarregar-pagina").addEventListener("click", () => {
+  location.reload();
+});
+
+

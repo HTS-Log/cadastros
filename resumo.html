@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <link rel="shortcut icon" href="https://logo.fretebras.com.br/3887620812/hts-log-santo-antonio-do-amparo-mg-ramo-transportadora-20231215024504_g.jpg" type="image/x-icon">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resumo Diário - HTS</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="light-mode">
+  <header>
+    <a href="index.html" style="color: white; text-decoration: none;">
+      <h1>← Cadastro de Motoristas - HTS</h1>
+    </a>
+  </header>
+
+  <div class="container">
+    <h2>Resumo Diário de Embarcadores</h2>
+    <div class="filtros">
+     <input type="date" id="filtro-data-resumo" />
+      <input type="text" id="filtro-nome-resumo" placeholder="Filtrar por nome..." />
+      <button id="recarregar-pagina">🔄 Recarregar</button>
+    </div>
+    <div id="resumo-tabela"></div>
+    <canvas id="graficoResumo" height="100"></canvas>
+  </div>
+
+  <script type="module" src="resumo.js"></script>
+</body>
+</html>
