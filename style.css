@@ -20,6 +20,7 @@ h2 {
   text-align: center;
 }
 
+
 @media screen and (max-width: 768px) {
   .table-container {
     overflow-x: auto;
@@ -245,3 +246,20 @@ body.dark-mode #toggle-theme {
   border-radius: 6px;
   cursor: pointer;
 }
+
+/* Expansão para telas grandes como TVs 4K */
+@media screen and (min-width: 1921px) {
+  .container {
+    max-width: 95%;
+  }
+
+  .table-container {
+    width: 100%;
+  }
+
+  table {
+    width: max-content;
+    min-width: 100%;
+  }
+}
+
