@@ -1,114 +1,93 @@
 const urlAPI = "https://script.google.com/macros/s/AKfycbzswkZb7WBo5zJIi2dwATjz5kNvw6Qx2QlNJzLj2xa8-hQTQ50iMeWZvvx7u55Zq3P5/exec";
 
-function carregarDados() {
-  fetch(urlAPI)
-    .then(response => response.json())
-    .then(dados => {
-      const tabela = document.getElementById("tabela-dados");
-      const filtroNome = document.getElementById("filtro-nome")?.value.toLowerCase() || "";
-      const filtroDataInput = document.getElementById("filtro-data")?.value;
+document.addEventListener("DOMContentLoaded", () => {
+  const filtroNome = document.getElementById("filtro-nome");
+  const filtroData = document.getElementById("filtro-data");
+  const tabela = document.getElementById("tabela-dados");
+  const recarregarBtn = document.getElementById("recarregar-pagina");
+  const toggle = document.getElementById("toggle-theme");
 
-      tabela.innerHTML = "";
+  // Define data atual no input de data
+  const hojeISO = new Date().toISOString().split("T")[0];
+  filtroData.value = hojeISO;
 
-      let dataFormatadaFiltro;
-      if (filtroDataInput) {
-        const partes = filtroDataInput.split("-"); 
-        dataFormatadaFiltro = `${partes[2]}/${partes[1]}/${partes[0]}`;
-      } else {
-        const hoje = new Date();
-        dataFormatadaFiltro = `${hoje.getDate().toString().padStart(2, '0')}/${(hoje.getMonth() + 1).toString().padStart(2, '0')}/${hoje.getFullYear()}`;
-      }
+  // Carrega dados iniciais
+  carregarDados();
 
-      dados.forEach(item => {
-        const dataObjeto = new Date(item.Data);
-        const dataFormatada = `${dataObjeto.getDate().toString().padStart(2, '0')}/${(dataObjeto.getMonth() + 1).toString().padStart(2, '0')}/${dataObjeto.getFullYear()}`;
+  // Filtros e eventos
+  filtroNome.addEventListener("input", carregarDados);
+  filtroData.addEventListener("change", carregarDados);
+  recarregarBtn.addEventListener("click", carregarDados);
 
-        const nomeMatch = item.Nome?.toLowerCase().includes(filtroNome);
-
-        if (dataFormatada === dataFormatadaFiltro && nomeMatch) {
-          const statusClass = item.Status === "Ativo" ? "status-ativo" : "status-inativo";
-          const finalizadoClass = item.Finalizado === "Sim" ? "finalizado-sim" : "finalizado-nao";
-          const finalizadoText = item.Finalizado || "Não";
-          const agente = item.Agente || "Não informado";
-          const embarcador = item.Embarcador || "Não informado";
-          const statusBadge = `<span class="badge ${item.Status === "Ativo" ? "ativo" : "inativo"}">${item.Status}</span>`;
-const finalizadoBadge = `<span class="badge ${item.Finalizado === "Sim" ? "sim" : "nao"}">${item.Finalizado || "Não"}</span>`;
-
-          const linhaHTML = `
-            <tr>
-              <td>${dataFormatada}</td>
-              <td>${item.Nome}</td>
-              <td>${item.Placa}</td>
-              <td>${item.Contato}</td>
-              <td class="${statusClass}">${item.Status}</td>
-              <td class="${finalizadoClass}">${finalizadoText}</td>
-              <td>${item.Pix}</td>
-              <td>${agente}</td>
-              <td>${embarcador}</td>
-            </tr>`;
-          tabela.innerHTML += linhaHTML;
-        }
-      });
-    })
-    .catch(error => console.error("Erro ao carregar os dados:", error));
-}
-
-document.getElementById("filtro-nome").addEventListener("input", carregarDados);
-document.getElementById("filtro-data").addEventListener("change", carregarDados);
-
-const hoje = new Date();
-const hojeISO = hoje.toISOString().split("T")[0]; 
-document.getElementById("filtro-data").value = hojeISO;
-
-carregarDados();
-setInterval(carregarDados, 10000);
-
-const toggle = document.getElementById("toggle-theme");
-toggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  const modoEscuroAtivo = document.body.classList.contains("dark-mode");
-  toggle.textContent = modoEscuroAtivo ? "☀️ Modo Claro" : "🌙 Modo Escuro";
+  // Alternar modo escuro/claro
+  toggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    const escuro = document.body.classList.contains("dark-mode");
+    toggle.textContent = escuro ? "☀️ Modo Claro" : "🌙 Modo Escuro";
+  });
 });
 
-document.getElementById("ver-resumo").addEventListener("click", async () => {
+async function carregarDados() {
+  const tabela = document.getElementById("tabela-dados");
+  const filtroNome = document.getElementById("filtro-nome").value.toLowerCase();
+  const filtroDataInput = document.getElementById("filtro-data").value;
+
+  tabela.innerHTML = `<tr><td colspan="9">🔄 Carregando...</td></tr>`;
+
   try {
     const response = await fetch(urlAPI);
+    if (!response.ok) throw new Error("Falha ao buscar dados");
     const dados = await response.json();
 
-    const filtroDataInput = document.getElementById("filtro-data")?.value;
-    let dataFiltro = "";
-    if (filtroDataInput) {
-      const partes = filtroDataInput.split("-");
-      dataFiltro = `${partes[2]}/${partes[1]}/${partes[0]}`;
-    }
+    // Converte filtro de data para DD/MM/YYYY
+    const partes = filtroDataInput.split("-");
+    const dataFiltro = `${partes[2]}/${partes[1]}/${partes[0]}`;
 
-    const contador = {};
-    dados.forEach(item => {
-      const dataObjeto = new Date(item.Data);
-      const dataFormatada = `${dataObjeto.getDate().toString().padStart(2, '0')}/${(dataObjeto.getMonth() + 1).toString().padStart(2, '0')}/${dataObjeto.getFullYear()}`;
-      
-      if (dataFormatada === dataFiltro) {
+    const linhas = dados
+      .filter(item => {
+        const dataItem = formatarData(item.Data);
+        const nomeMatch = item.Nome?.toLowerCase().includes(filtroNome);
+        return dataItem === dataFiltro && nomeMatch;
+      })
+      .map(item => {
+        const dataItem = formatarData(item.Data);
+        const statusClass = item.Status === "Ativo" ? "status-ativo" : "status-inativo";
+        const finalizadoClass = item.Finalizado === "Sim" ? "finalizado-sim" : "finalizado-nao";
+        const finalizadoText = item.Finalizado || "Não";
+        const agente = item.Agente || "Não informado";
         const embarcador = item.Embarcador || "Não informado";
-        contador[embarcador] = (contador[embarcador] || 0) + 1;
-      }
-    });
 
-    const maisEnviou = Object.entries(contador).sort((a, b) => b[1] - a[1])[0];
+        return `
+          <tr>
+            <td>${dataItem}</td>
+            <td>${item.Nome || ""}</td>
+            <td>${item.Placa || ""}</td>
+            <td>${item.Contato || ""}</td>
+            <td class="${statusClass}">${item.Status || ""}</td>
+            <td class="${finalizadoClass}">${finalizadoText}</td>
+            <td>${item.Pix || ""}</td>
+            <td>${agente}</td>
+            <td>${embarcador}</td>
+          </tr>`;
+      })
+      .join("");
 
-    const resumoDiv = document.getElementById("resumo-dia");
-    if (maisEnviou) {
-      resumoDiv.textContent = `📌 Embarcador com mais cadastros hoje (${dataFiltro}): ${maisEnviou[0]} (${maisEnviou[1]} cadastros)`;
-    } else {
-      resumoDiv.textContent = `⚠️ Nenhum cadastro encontrado para a data selecionada (${dataFiltro}).`;
-    }
-
+    tabela.innerHTML = linhas || `<tr><td colspan="9">⚠️ Nenhum dado encontrado para esta data.</td></tr>`;
   } catch (error) {
-    console.error("Erro ao gerar resumo:", error);
+    console.error("Erro ao carregar os dados:", error);
+    tabela.innerHTML = `<tr><td colspan="9" style="color:red;">❌ Erro ao carregar dados da API.</td></tr>`;
   }
-});
+}
 
-document.getElementById("recarregar-pagina").addEventListener("click", () => {
-  location.reload();
-});
-
-
+// Corrige datas no formato BR ou ISO
+function formatarData(dataStr) {
+  if (!dataStr) return "";
+  // Caso venha como DD/MM/YYYY
+  if (dataStr.includes("/")) return dataStr;
+  // Caso venha como YYYY-MM-DD ou ISO
+  const data = new Date(dataStr);
+  if (isNaN(data)) return "";
+  return `${data.getDate().toString().padStart(2, "0")}/${(data.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}/${data.getFullYear()}`;
+}
