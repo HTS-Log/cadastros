@@ -3,18 +3,20 @@ const urlAPI = "https://script.google.com/macros/s/AKfycbzswkZb7WBo5zJIi2dwATjz5
 document.addEventListener("DOMContentLoaded", () => {
   const filtroNome = document.getElementById("filtro-nome");
   const filtroData = document.getElementById("filtro-data");
-  const tabela = document.getElementById("tabela-dados");
   const recarregarBtn = document.getElementById("recarregar-pagina");
   const toggle = document.getElementById("toggle-theme");
 
-  // Define data atual no input de data
+  // Define data atual
   const hojeISO = new Date().toISOString().split("T")[0];
   filtroData.value = hojeISO;
+
+  // Seta texto correto do botão de tema
+  atualizarTextoTema();
 
   // Carrega dados iniciais
   carregarDados();
 
-  // Filtros e eventos
+  // Eventos de filtro
   filtroNome.addEventListener("input", carregarDados);
   filtroData.addEventListener("change", carregarDados);
   recarregarBtn.addEventListener("click", carregarDados);
@@ -22,17 +24,28 @@ document.addEventListener("DOMContentLoaded", () => {
   // Alternar modo escuro/claro
   toggle.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
-    const escuro = document.body.classList.contains("dark-mode");
-    toggle.textContent = escuro ? "☀️ Modo Claro" : "🌙 Modo Escuro";
+    atualizarTextoTema();
   });
+
+  // Atualiza automaticamente a cada 60 segundos
+  setInterval(() => {
+    console.log("Atualização automática!");
+    carregarDados();
+  }, 60000);
 });
+
+function atualizarTextoTema() {
+  const toggle = document.getElementById("toggle-theme");
+  const escuro = document.body.classList.contains("dark-mode");
+  toggle.textContent = escuro ? "☀️ Modo Claro" : "🌙 Modo Escuro";
+}
 
 async function carregarDados() {
   const tabela = document.getElementById("tabela-dados");
   const filtroNome = document.getElementById("filtro-nome").value.toLowerCase();
   const filtroDataInput = document.getElementById("filtro-data").value;
 
-  tabela.innerHTML = `<tr><td colspan="9">🔄 Carregando...</td></tr>`;
+  tabela.innerHTML = `<tr><td colspan="9">🔄 Atualizando...</td></tr>`;
 
   try {
     const response = await fetch(urlAPI);
@@ -40,14 +53,14 @@ async function carregarDados() {
     const dados = await response.json();
 
     // Converte filtro de data para DD/MM/YYYY
-    const partes = filtroDataInput.split("-");
-    const dataFiltro = `${partes[2]}/${partes[1]}/${partes[0]}`;
+    const [ano, mes, dia] = filtroDataInput.split("-");
+    const dataFiltro = `${dia}/${mes}/${ano}`;
 
     const linhas = dados
       .filter(item => {
         const dataItem = formatarData(item.Data);
-        const nomeMatch = item.Nome?.toLowerCase().includes(filtroNome);
-        return dataItem === dataFiltro && nomeMatch;
+        return dataItem === dataFiltro &&
+          item.Nome?.toLowerCase().includes(filtroNome);
       })
       .map(item => {
         const dataItem = formatarData(item.Data);
@@ -58,17 +71,17 @@ async function carregarDados() {
         const embarcador = item.Embarcador || "Não informado";
 
         return `
-          <tr>
-            <td>${dataItem}</td>
-            <td>${item.Nome || ""}</td>
-            <td>${item.Placa || ""}</td>
-            <td>${item.Contato || ""}</td>
-            <td class="${statusClass}">${item.Status || ""}</td>
-            <td class="${finalizadoClass}">${finalizadoText}</td>
-            <td>${item.Pix || ""}</td>
-            <td>${agente}</td>
-            <td>${embarcador}</td>
-          </tr>`;
+        <tr>
+          <td>${dataItem}</td>
+          <td>${item.Nome || ""}</td>
+          <td>${item.Placa || ""}</td>
+          <td>${item.Contato || ""}</td>
+          <td class="${statusClass}">${item.Status || ""}</td>
+          <td class="${finalizadoClass}">${finalizadoText}</td>
+          <td>${item.Pix || ""}</td>
+          <td>${agente}</td>
+          <td>${embarcador}</td>
+        </tr>`;
       })
       .join("");
 
@@ -79,12 +92,9 @@ async function carregarDados() {
   }
 }
 
-// Corrige datas no formato BR ou ISO
 function formatarData(dataStr) {
   if (!dataStr) return "";
-  // Caso venha como DD/MM/YYYY
   if (dataStr.includes("/")) return dataStr;
-  // Caso venha como YYYY-MM-DD ou ISO
   const data = new Date(dataStr);
   if (isNaN(data)) return "";
   return `${data.getDate().toString().padStart(2, "0")}/${(data.getMonth() + 1)
