@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(() => {
     console.log("Atualização automática");
     carregarDados();
-  }, 60000);
+  }, 500000);
 });
 
 
